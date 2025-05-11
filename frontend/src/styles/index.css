@@ -1,0 +1,226 @@
+/* Base styles for the entire application */
+
+:root {
+  /* Color palette */
+  --primary-color: #3498db;
+  --primary-dark: #2980b9;
+  --primary-light: #a9cce3;
+  --secondary-color: #2ecc71;
+  --secondary-dark: #27ae60;
+  --accent-color: #9b59b6;
+  --accent-dark: #8e44ad;
+  --warning-color: #f39c12;
+  --danger-color: #e74c3c;
+  --success-color: #2ecc71;
+  --info-color: #3498db;
+  
+  /* Neutral colors */
+  --dark: #2c3e50;
+  --medium-dark: #34495e;
+  --medium: #7f8c8d;
+  --medium-light: #bdc3c7;
+  --light: #ecf0f1;
+  --white: #ffffff;
+  
+  /* Status colors */
+  --status-pending: #f39c12;
+  --status-processing: #3498db;
+  --status-completed: #2ecc71;
+  --status-failed: #e74c3c;
+  --status-cancelled: #95a5a6;
+  
+  /* Priority colors */
+  --priority-high: #e74c3c;
+  --priority-normal: #3498db;
+  --priority-low: #95a5a6;
+  
+  /* Typography */
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-size-small: 0.875rem;
+  --font-size-normal: 1rem;
+  --font-size-medium: 1.25rem;
+  --font-size-large: 1.5rem;
+  --font-size-xlarge: 2rem;
+  --font-size-xxlarge: 3rem;
+  
+  /* Spacing */
+  --spacing-xxsmall: 0.25rem;
+  --spacing-xsmall: 0.5rem;
+  --spacing-small: 0.75rem;
+  --spacing-medium: 1rem;
+  --spacing-large: 1.5rem;
+  --spacing-xlarge: 2rem;
+  --spacing-xxlarge: 3rem;
+  
+  /* Border radius */
+  --border-radius-small: 0.25rem;
+  --border-radius-medium: 0.5rem;
+  --border-radius-large: 1rem;
+  --border-radius-circle: 50%;
+  
+  /* Shadows */
+  --shadow-small: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  --shadow-medium: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  --shadow-large: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-medium: 0.3s ease;
+  --transition-slow: 0.5s ease;
+}
+
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font-family);
+  font-size: var(--font-size-normal);
+  line-height: 1.6;
+  color: var(--dark);
+  background-color: var(--light);
+}
+
+body {
+  overflow-x: hidden;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--primary-dark);
+}
+
+button {
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-size: var(--font-size-normal);
+  padding: var(--spacing-small) var(--spacing-medium);
+  border-radius: var(--border-radius-small);
+  border: none;
+  background-color: var(--primary-color);
+  color: var(--white);
+  transition: background-color var(--transition-fast);
+}
+
+button:hover {
+  background-color: var(--primary-dark);
+}
+
+button:disabled {
+  background-color: var(--medium-light);
+  cursor: not-allowed;
+}
+
+input, select, textarea {
+  font-family: var(--font-family);
+  font-size: var(--font-size-normal);
+  padding: var(--spacing-small) var(--spacing-medium);
+  border: 1px solid var(--medium-light);
+  border-radius: var(--border-radius-small);
+  width: 100%;
+  transition: border-color var(--transition-fast);
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: var(--spacing-medium);
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: var(--font-size-xxlarge);
+}
+
+h2 {
+  font-size: var(--font-size-xlarge);
+}
+
+h3 {
+  font-size: var(--font-size-large);
+}
+
+p {
+  margin-bottom: var(--spacing-medium);
+}
+
+/* Container for the app */
+#root {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Common utility classes */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-medium);
+}
+
+.error-message {
+  color: var(--danger-color);
+  background-color: rgba(231, 76, 60, 0.1);
+  padding: var(--spacing-medium);
+  border-radius: var(--border-radius-small);
+  margin-bottom: var(--spacing-medium);
+}
+
+.loading-message {
+  color: var(--info-color);
+  text-align: center;
+  padding: var(--spacing-large);
+}
+
+.no-results, .no-jobs, .not-found {
+  text-align: center;
+  padding: var(--spacing-xlarge);
+  color: var(--medium);
+  font-size: var(--font-size-medium);
+}
+
+/* Status and priority classes */
+.status-pending {
+  color: var(--status-pending);
+}
+
+.status-processing {
+  color: var(--status-processing);
+}
+
+.status-completed {
+  color: var(--status-completed);
+}
+
+.status-failed {
+  color: var(--status-failed);
+}
+
+.status-cancelled {
+  color: var(--status-cancelled);
+}
+
+.priority-high {
+  color: var(--priority-high);
+}
+
+.priority-normal {
+  color: var(--priority-normal);
+}
+
+.priority-low {
+  color: var(--priority-low);
+}

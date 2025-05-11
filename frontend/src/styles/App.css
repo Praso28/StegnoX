@@ -1,0 +1,132 @@
+/* App layout styles */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding: var(--spacing-medium) 0;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--spacing-medium);
+}
+
+/* Page header styles */
+.page-header {
+  margin-bottom: var(--spacing-large);
+  border-bottom: 1px solid var(--medium-light);
+  padding-bottom: var(--spacing-medium);
+}
+
+.page-header h1 {
+  font-size: var(--font-size-xlarge);
+  color: var(--dark);
+  margin-bottom: var(--spacing-xsmall);
+}
+
+.page-header p {
+  color: var(--medium);
+  font-size: var(--font-size-medium);
+}
+
+/* Button styles */
+.primary-button {
+  display: inline-block;
+  background-color: var(--primary-color);
+  color: var(--white);
+  padding: var(--spacing-small) var(--spacing-large);
+  border-radius: var(--border-radius-small);
+  font-weight: bold;
+  transition: background-color var(--transition-fast);
+}
+
+.primary-button:hover {
+  background-color: var(--primary-dark);
+  color: var(--white);
+}
+
+.secondary-button {
+  display: inline-block;
+  background-color: transparent;
+  color: var(--primary-color);
+  padding: var(--spacing-small) var(--spacing-large);
+  border-radius: var(--border-radius-small);
+  border: 2px solid var(--primary-color);
+  font-weight: bold;
+  transition: all var(--transition-fast);
+}
+
+.secondary-button:hover {
+  background-color: var(--primary-color);
+  color: var(--white);
+}
+
+/* Card styles */
+.card {
+  background-color: var(--white);
+  border-radius: var(--border-radius-medium);
+  box-shadow: var(--shadow-small);
+  padding: var(--spacing-large);
+  margin-bottom: var(--spacing-large);
+}
+
+.card-header {
+  margin-bottom: var(--spacing-medium);
+  border-bottom: 1px solid var(--medium-light);
+  padding-bottom: var(--spacing-small);
+}
+
+.card-header h2 {
+  font-size: var(--font-size-large);
+  margin-bottom: var(--spacing-xsmall);
+}
+
+.card-content {
+  margin-bottom: var(--spacing-medium);
+}
+
+.card-footer {
+  border-top: 1px solid var(--medium-light);
+  padding-top: var(--spacing-medium);
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Form styles */
+.form-group {
+  margin-bottom: var(--spacing-medium);
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: var(--spacing-xsmall);
+  font-weight: bold;
+}
+
+.form-actions {
+  margin-top: var(--spacing-large);
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Grid layout */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--spacing-large);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .main-content {
+    padding: var(--spacing-medium) var(--spacing-small);
+  }
+  
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

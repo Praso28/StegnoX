@@ -1,0 +1,86 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - stegnox-network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - stegnox-uploads:/app/uploads
+      - stegnox-storage:/app/data/storage
+      - stegnox-queue:/app/data/queue
+    environment:
+      - FLASK_ENV=production
+      - SECRET_KEY=${SECRET_KEY:-default_dev_key}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-default_jwt_key}
+      - DATABASE_URI=${DATABASE_URI:-sqlite:///stegnox.db}
+    restart: unless-stopped
+    networks:
+      - stegnox-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    networks:
+      - stegnox-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  worker:
+    build: ./backend
+    command: python -m examples.worker
+    volumes:
+      - stegnox-uploads:/app/uploads
+      - stegnox-storage:/app/data/storage
+      - stegnox-queue:/app/data/queue
+    environment:
+      - FLASK_ENV=production
+      - SECRET_KEY=${SECRET_KEY:-default_dev_key}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-default_jwt_key}
+      - DATABASE_URI=${DATABASE_URI:-sqlite:///stegnox.db}
+    depends_on:
+      - backend
+      - redis
+    restart: unless-stopped
+    networks:
+      - stegnox-network
+
+networks:
+  stegnox-network:
+    driver: bridge
+
+volumes:
+  stegnox-uploads:
+  stegnox-storage:
+  stegnox-queue:
+  redis-data:

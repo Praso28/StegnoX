@@ -1,0 +1,11 @@
+{
+  "81827db5-91f2-41fc-93b4-1437b663c435": {
+    "user_id": "81827db5-91f2-41fc-93b4-1437b663c435",
+    "username": "testuser",
+    "email": "test@example.com",
+    "role": "user",
+    "created_at": "2025-05-10T23:53:27.428671",
+    "last_login": "2025-05-11T00:17:02.065466",
+    "password_hash": "scrypt:32768:8:1$eaMtHgIscQ7PRYXz$53e52d3748e47818bc241ffa8ae52aa959c132a5590dda1ab9d718a1675e70cb90257b053430848396b9023ffa62d1df26bfbea3fea22f81cda70390b5ec6a02"
+  }
+}

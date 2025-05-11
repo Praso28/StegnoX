@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  frontend:
+    environment:
+      - NODE_ENV=production
+    restart: always
+
+  backend:
+    environment:
+      - FLASK_ENV=production
+      - DEBUG=false
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+
+  redis:
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '0.3'
+          memory: 256M
+
+  worker:
+    environment:
+      - FLASK_ENV=production
+      - DEBUG=false
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+      replicas: 2
