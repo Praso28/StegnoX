@@ -4,6 +4,7 @@ numpy>=1.24.0
 scipy>=1.10.0
 matplotlib>=3.7.0
 opencv-python>=4.8.0
+pyparsing>=2.4.7
 
 # Web backend
 Flask>=2.3.0
@@ -30,7 +31,6 @@ coverage==7.3.2
 psutil>=5.9.0
 python-magic>=0.4.27
 redis>=4.0.0
-py2exe>=0.11.1.0
 
 # Utilities
 python-dateutil>=2.8.2
