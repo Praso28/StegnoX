@@ -9,7 +9,7 @@ import sys
 # Add parent directory to path to allow imports
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))))
 
-from queue.job_queue import JobQueue, JobPriority, JobStatus
+from steg_queue.job_queue import JobQueue, JobPriority, JobStatus
 from storage.storage_service import StorageService
 from ...auth.auth import token_required
 from ...utils.response import success_response, error_response

@@ -17,7 +17,7 @@ The Job Queue System is responsible for managing and processing steganography an
 ### Basic Usage
 
 ```python
-from queue.job_queue import JobQueue, JobStatus, JobPriority
+from steg_queue.job_queue import JobQueue, JobStatus, JobPriority
 
 # Create a job queue
 queue = JobQueue(storage_dir="queue_data")
@@ -52,7 +52,7 @@ Here's an example of how to implement a worker process:
 
 ```python
 import time
-from queue.job_queue import JobQueue
+from steg_queue.job_queue import JobQueue
 from engine.stegnox_engine import StegnoxEngine
 
 def worker_process(worker_id):

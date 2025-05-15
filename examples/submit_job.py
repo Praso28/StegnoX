@@ -10,7 +10,7 @@ import argparse
 
 # Add parent directory to path to allow imports
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from queue.job_queue import JobQueue, JobPriority
+from steg_queue.job_queue import JobQueue, JobPriority
 from storage.storage_service import StorageService
 
 def main():
