@@ -116,16 +116,39 @@ class StegnoxEngine:
             image_path (str): Path to the image file
 
         Returns:
-            dict: Analysis results
+            dict: Analysis results with confidence score and assessment
         """
         try:
             # Read image using OpenCV
             img = cv2.imread(image_path)
             if img is None:
-                return {"error": "Could not read image with OpenCV"}
+                return {
+                    "error": "Could not read image with OpenCV",
+                    "confidence": 0,
+                    "assessment": "Failed",
+                    "statistics": {
+                        "zero_count": 0,
+                        "nonzero_count": 0,
+                        "suspicious_blocks": 0,
+                        "total_blocks": 0
+                    }
+                }
 
             # Convert to grayscale for simplicity
-            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            try:
+                gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            except Exception as e:
+                return {
+                    "error": f"Failed to convert image to grayscale: {str(e)}",
+                    "confidence": 0,
+                    "assessment": "Failed",
+                    "statistics": {
+                        "zero_count": 0,
+                        "nonzero_count": 0,
+                        "suspicious_blocks": 0,
+                        "total_blocks": 0
+                    }
+                }
 
             # Divide the image into 8x8 blocks (standard for DCT)
             h, w = gray.shape
@@ -142,31 +165,30 @@ class StegnoxEngine:
             # Process each 8x8 block
             for y in range(0, h-block_size+1, block_size):
                 for x in range(0, w-block_size+1, block_size):
-                    # Extract block
-                    block = gray[y:y+block_size, x:x+block_size].astype(float)
+                    try:
+                        # Extract block
+                        block = gray[y:y+block_size, x:x+block_size].astype(float)
 
-                    # Apply DCT
-                    block_dct = dct(dct(block.T, norm='ortho').T, norm='ortho')
+                        # Apply DCT
+                        block_dct = dct(dct(block.T, norm='ortho').T, norm='ortho')
 
-                    # Analyze DCT coefficients
-                    # In steganography, often the least significant bits of DCT coefficients are modified
-                    # Look for unusual patterns in the coefficients
+                        # Count zero and non-zero coefficients
+                        zero_coeffs = np.count_nonzero(block_dct == 0)
+                        nonzero_coeffs = block_size * block_size - zero_coeffs
 
-                    # Count zero and non-zero coefficients
-                    zero_coeffs = np.count_nonzero(block_dct == 0)
-                    nonzero_coeffs = block_size * block_size - zero_coeffs
+                        dct_stats["zero_count"] += zero_coeffs
+                        dct_stats["nonzero_count"] += nonzero_coeffs
+                        dct_stats["total_blocks"] += 1
 
-                    dct_stats["zero_count"] += zero_coeffs
-                    dct_stats["nonzero_count"] += nonzero_coeffs
-                    dct_stats["total_blocks"] += 1
+                        # Check for suspicious patterns
+                        odd_coeffs = np.count_nonzero(np.abs(block_dct) % 2 > 0.5)
+                        if odd_coeffs > (block_size * block_size * 0.7):
+                            dct_stats["suspicious_blocks"] += 1
+                    except Exception as e:
+                        # Skip problematic blocks but continue processing
+                        continue
 
-                    # Check for suspicious patterns
-                    # One simple check: unusual number of coefficients with odd values
-                    odd_coeffs = np.count_nonzero(np.abs(block_dct) % 2 > 0.5)
-                    if odd_coeffs > (block_size * block_size * 0.7):  # Threshold can be adjusted
-                        dct_stats["suspicious_blocks"] += 1
-
-            # Calculate confidence score (simple heuristic)
+            # Calculate confidence score
             if dct_stats["total_blocks"] > 0:
                 confidence = (dct_stats["suspicious_blocks"] / dct_stats["total_blocks"]) * 100
             else:
@@ -180,7 +202,17 @@ class StegnoxEngine:
             }
 
         except Exception as e:
-            return {"error": f"DCT analysis failed: {str(e)}"}
+            return {
+                "error": f"DCT analysis failed: {str(e)}",
+                "confidence": 0,
+                "assessment": "Failed",
+                "statistics": {
+                    "zero_count": 0,
+                    "nonzero_count": 0,
+                    "suspicious_blocks": 0,
+                    "total_blocks": 0
+                }
+            }
 
     def bit_plane_analysis(self, image_path):
         """
