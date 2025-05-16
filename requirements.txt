@@ -26,6 +26,7 @@ Flask-Cors>=4.0.0
 Flask-SQLAlchemy>=3.1.0
 Flask-Login>=0.6.3
 sqlalchemy>=1.4.0
+flask-testing>=0.8.1
 
 # Desktop GUI
 tk
@@ -41,9 +42,14 @@ execnet>=1.9.0
 pytest-ordering==0.6
 coverage==7.3.2
 psutil>=5.9.0
-python-magic>=0.4.27
+python-magic-bin>=0.4.14  # Windows-compatible version
 redis>=4.0.0
+
+# Selenium and related
 selenium>=4.0.0
+websocket-client>=1.6.0  # Required by selenium for WebSocket support
+webdriver-manager>=4.0.0  # Handles ChromeDriver installation
+pytest-selenium>=4.0.0  # Pytest integration for Selenium
 
 # Utilities
 python-dateutil>=2.8.2

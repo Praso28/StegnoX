@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Jobs{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h2>Job Management</h2>
+        
+        <div class="list-group mt-4" id="job-list">
+            <!-- Jobs will be loaded here -->
+        </div>
+
+        <div id="job-details" class="mt-4" style="display: none;">
+            <h3>Job Details</h3>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Job ID: <span id="job-id"></span></h5>
+                    <p class="card-text">Status: <span id="job-status" class="badge bg-primary"></span></p>
+                    <div id="job-results">
+                        <!-- Job results will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function loadJobs() {
+    try {
+        const response = await fetch('/api/v1/jobs');
+        const data = await response.json();
+        
+        const jobList = document.getElementById('job-list');
+        jobList.innerHTML = '';
+
+        data.data.forEach(job => {
+            const jobItem = document.createElement('a');
+            jobItem.href = '#';
+            jobItem.className = 'list-group-item list-group-item-action job-item';
+            jobItem.dataset.jobId = job.job_id;
+            jobItem.innerHTML = `
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">Job ${job.job_id}</h5>
+                    <small class="text-muted">${job.created_at}</small>
+                </div>
+                <p class="mb-1">Status: ${job.status}</p>
+            `;
+            jobItem.addEventListener('click', () => loadJobDetails(job.job_id));
+            jobList.appendChild(jobItem);
+        });
+    } catch (error) {
+        alert('Error loading jobs: ' + error.message);
+    }
+}
+
+async function loadJobDetails(jobId) {
+    try {
+        const response = await fetch(`/api/v1/jobs/${jobId}`);
+        const data = await response.json();
+        
+        document.getElementById('job-details').style.display = 'block';
+        document.getElementById('job-id').textContent = data.data.job_id;
+        document.getElementById('job-status').textContent = data.data.status;
+        
+        const resultsDiv = document.getElementById('job-results');
+        resultsDiv.innerHTML = `
+            <h6 class="mt-3">Results:</h6>
+            <pre>${JSON.stringify(data.data.results, null, 2)}</pre>
+        `;
+    } catch (error) {
+        alert('Error loading job details: ' + error.message);
+    }
+}
+
+// Load jobs when the page loads
+document.addEventListener('DOMContentLoaded', loadJobs);
+</script>
+{% endblock %} 

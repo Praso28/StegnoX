@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Encode{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h2>Encode Message</h2>
+        <form id="encode-form" class="mt-4">
+            <div class="mb-3">
+                <label for="file-upload" class="form-label">Select Image</label>
+                <input type="file" class="form-control" id="file-upload" accept="image/*" required>
+            </div>
+            <div class="mb-3">
+                <label for="message-input" class="form-label">Message</label>
+                <textarea class="form-control" id="message-input" rows="3" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="method-select" class="form-label">Encoding Method</label>
+                <select class="form-control" id="method-select" required>
+                    <option value="lsb_encoding">LSB</option>
+                    <option value="parity_encoding">Parity Bit</option>
+                    <option value="metadata_encoding">Metadata</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary" id="encode-button">Encode</button>
+        </form>
+
+        <div id="encode-result" class="mt-4" style="display: none;">
+            <div class="alert alert-success">
+                Message encoded successfully!
+                <a href="#" id="download-link" class="btn btn-success ms-3">Download Image</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('encode-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData();
+    const fileInput = document.getElementById('file-upload');
+    const messageInput = document.getElementById('message-input');
+    const methodSelect = document.getElementById('method-select');
+
+    formData.append('file', fileInput.files[0]);
+    formData.append('message', messageInput.value);
+    formData.append('method', methodSelect.value);
+
+    try {
+        const response = await fetch('/api/v1/analysis/encode', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            document.getElementById('encode-result').style.display = 'block';
+            document.getElementById('download-link').href = '/api/v1/analysis/download/' + data.data.filename;
+        } else {
+            alert('Encoding failed: ' + data.message);
+        }
+    } catch (error) {
+        alert('Error during encoding: ' + error.message);
+    }
+});
+</script>
+{% endblock %} 

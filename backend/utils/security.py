@@ -1,8 +1,112 @@
 """
-Security utilities for StegnoX backend
+Security utilities for the StegnoX backend
 """
 
-from flask import request, current_app
+import jwt
+from functools import wraps
+from flask import request, jsonify, current_app
+from flask_cors import CORS
+from werkzeug.security import generate_password_hash, check_password_hash
+
+def configure_cors(app):
+    """Configure CORS for the application."""
+    CORS(app, resources={
+        r"/api/*": {
+            "origins": app.config.get('CORS_ORIGINS', '*'),
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Authorization", "Content-Type"]
+        }
+    })
+
+def init_security(app):
+    """Initialize security features."""
+    app.config['JWT_SECRET_KEY'] = app.config.get('JWT_SECRET_KEY', 'dev-key-please-change')
+    configure_cors(app)
+
+def generate_token(username, role):
+    """Generate a JWT token."""
+    return jwt.encode(
+        {'username': username, 'role': role},
+        current_app.config['JWT_SECRET_KEY'],
+        algorithm='HS256'
+    )
+
+def token_required(f):
+    """Decorator to require JWT token."""
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = None
+
+        # Get token from header
+        auth_header = request.headers.get('Authorization')
+        if auth_header and auth_header.startswith('Bearer '):
+            token = auth_header.split(' ')[1]
+
+        if not token:
+            return jsonify({
+                'success': False,
+                'message': 'Token is missing'
+            }), 401
+
+        try:
+            # Decode token
+            data = jwt.decode(
+                token,
+                current_app.config['JWT_SECRET_KEY'],
+                algorithms=['HS256']
+            )
+            current_user = {
+                'username': data['username'],
+                'role': data['role']
+            }
+        except:
+            return jsonify({
+                'success': False,
+                'message': 'Token is invalid'
+            }), 401
+
+        return f(current_user, *args, **kwargs)
+
+    return decorated
+
+def admin_required(f):
+    """Decorator to require admin role."""
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = None
+
+        if 'Authorization' in request.headers:
+            auth_header = request.headers['Authorization']
+            try:
+                token = auth_header.split(" ")[1]
+            except IndexError:
+                return jsonify({'message': 'Token is missing!'}), 401
+
+        if not token:
+            return jsonify({'message': 'Token is missing!'}), 401
+
+        try:
+            data = jwt.decode(
+                token,
+                current_app.config['JWT_SECRET_KEY'],
+                algorithms=["HS256"]
+            )
+            if data['role'] != 'admin':
+                return jsonify({'message': 'Admin privileges required!'}), 403
+        except:
+            return jsonify({'message': 'Token is invalid!'}), 401
+
+        return f(*args, **kwargs)
+
+    return decorated
+
+def hash_password(password):
+    """Hash a password."""
+    return generate_password_hash(password)
+
+def verify_password(password_hash, password):
+    """Verify a password against its hash."""
+    return check_password_hash(password_hash, password)
 
 def add_security_headers(response):
     """
@@ -43,31 +147,6 @@ def add_security_headers(response):
         response.headers['Expires'] = '0'
     
     return response
-
-def configure_cors(app):
-    """
-    Configure CORS for the application
-    
-    Args:
-        app: Flask application
-    """
-    # Import CORS here to make it optional
-    try:
-        from flask_cors import CORS
-        
-        # Configure CORS
-        CORS(app, resources={
-            r"/api/*": {
-                "origins": current_app.config.get('CORS_ORIGINS', '*'),
-                "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-                "allow_headers": ["Content-Type", "Authorization"],
-                "expose_headers": ["Content-Type", "X-Total-Count"],
-                "supports_credentials": True,
-                "max_age": 600
-            }
-        })
-    except ImportError:
-        app.logger.warning("flask-cors not installed. CORS not configured.")
 
 def init_security(app):
     """

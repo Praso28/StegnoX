@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2 text-center">
+        <h1 class="display-4">Welcome to StegnoX</h1>
+        <p class="lead">A powerful steganography analysis tool</p>
+        
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Analyze</h5>
+                        <p class="card-text">Analyze images for hidden messages using multiple steganography detection methods.</p>
+                        <a href="/analyze" class="btn btn-primary">Start Analysis</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Encode</h5>
+                        <p class="card-text">Hide messages in images using various steganography techniques.</p>
+                        <a href="/encode" class="btn btn-primary">Encode Message</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Jobs</h5>
+                        <p class="card-text">View and manage your analysis and encoding jobs.</p>
+                        <a href="/jobs" class="btn btn-primary">View Jobs</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-5">
+            <h2>Features</h2>
+            <ul class="list-unstyled">
+                <li>LSB (Least Significant Bit) Analysis</li>
+                <li>Parity Bit Analysis</li>
+                <li>Metadata Analysis</li>
+                <li>Multiple Encoding Methods</li>
+                <li>Job Management</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %} 

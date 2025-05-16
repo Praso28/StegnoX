@@ -1,0 +1,11 @@
+{
+  "1fe7f0c1-4b05-4dfe-9af6-64fe3054bcd9": {
+    "user_id": "1fe7f0c1-4b05-4dfe-9af6-64fe3054bcd9",
+    "username": "testuser",
+    "email": "test@example.com",
+    "role": "user",
+    "created_at": "2025-05-16T01:46:16.599449",
+    "last_login": "2025-05-16T01:51:43.147562",
+    "password_hash": "scrypt:32768:8:1$XZiWOaPQJj8PkCIg$0f31829e579169db06eac34401ef3815ad461487bf3ed3c95c1a0c4ce18c3897e58bdd9fedc8d9d9fcc471bcf5d46797ccfc74c2e3bf69eaf61494d81026e7f3"
+  }
+}

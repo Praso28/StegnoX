@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Analyze{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h2>Analyze Image</h2>
+        <form id="analyze-form" class="mt-4">
+            <div class="mb-3">
+                <label for="file-upload" class="form-label">Select Image</label>
+                <input type="file" class="form-control" id="file-upload" accept="image/*" required>
+            </div>
+            <button type="submit" class="btn btn-primary" id="analyze-button">Analyze</button>
+        </form>
+
+        <div id="analysis-results" class="mt-4" style="display: none;">
+            <h3>Analysis Results</h3>
+            <div class="card">
+                <div class="card-body">
+                    <h5>LSB Extraction</h5>
+                    <pre id="lsb-results"></pre>
+
+                    <h5>Parity Bit Extraction</h5>
+                    <pre id="parity-results"></pre>
+
+                    <h5>Metadata Extraction</h5>
+                    <pre id="metadata-results"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('analyze-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData();
+    const fileInput = document.getElementById('file-upload');
+    formData.append('file', fileInput.files[0]);
+
+    try {
+        const response = await fetch('/api/v1/analysis/analyze', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            document.getElementById('analysis-results').style.display = 'block';
+            document.getElementById('lsb-results').textContent = JSON.stringify(data.data.lsb_extraction, null, 2);
+            document.getElementById('parity-results').textContent = JSON.stringify(data.data.parity_bit_extraction, null, 2);
+            document.getElementById('metadata-results').textContent = JSON.stringify(data.data.metadata_extraction, null, 2);
+        } else {
+            alert('Analysis failed: ' + data.message);
+        }
+    } catch (error) {
+        alert('Error during analysis: ' + error.message);
+    }
+});
+</script>
+{% endblock %} 
