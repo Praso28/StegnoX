@@ -38,7 +38,7 @@ PyQt5>=5.15.0  # Alternative GUI framework
 customtkinter>=5.2.0  # Modern themed widgets for tk
 
 # Testing
-pytest==7.4.3
+pytest>=7.0.0,<8.0.0  # Updated version range
 pytest-cov==4.1.0
 pytest-env==1.1.1
 pytest-timeout==2.2.0
@@ -48,7 +48,7 @@ execnet>=1.9.0
 pytest-ordering==0.6
 pytest-variables>=3.0.0  # Required by pytest-selenium
 pytest-mock>=3.10.0  # For mocking in tests
-pytest-asyncio>=0.21.0  # For async tests
+pytest-asyncio>=0.21.0,<0.22.0  # Fixed version range for compatibility
 coverage==7.3.2
 psutil>=5.9.0
 python-magic-bin==0.4.14; sys_platform == 'win32'  # Windows-specific version
