@@ -35,10 +35,17 @@ jobs:
         
     - name: Create test directories
       run: |
-        mkdir -p tests/data
-        mkdir -p storage/temp
-        mkdir -p backend/instance
-        chmod -R 777 tests/data storage/temp backend/instance || true
+        mkdir -p tests/data 2>/dev/null || true
+        mkdir -p storage/temp 2>/dev/null || true
+        mkdir -p backend/instance 2>/dev/null || true
+        if [ "$RUNNER_OS" == "Windows" ]; then
+          icacls "tests/data" /grant "Users:(OI)(CI)F" /T || true
+          icacls "storage/temp" /grant "Users:(OI)(CI)F" /T || true
+          icacls "backend/instance" /grant "Users:(OI)(CI)F" /T || true
+        else
+          chmod -R 777 tests/data storage/temp backend/instance || true
+        fi
+      shell: bash
     
     - name: Install system dependencies (Linux)
       if: runner.os == 'Linux'
