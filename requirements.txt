@@ -27,9 +27,15 @@ Flask-SQLAlchemy>=3.1.0
 Flask-Login>=0.6.3
 sqlalchemy>=1.4.0
 flask-testing>=0.8.1
+flask-migrate>=4.0.5  # For database migrations
+flask-marshmallow>=0.15.0  # For serialization
+marshmallow-sqlalchemy>=0.29.0  # SQLAlchemy integration for marshmallow
+python-dotenv>=1.0.0  # For environment variables
 
 # Desktop GUI
 tk
+PyQt5>=5.15.0  # Alternative GUI framework
+customtkinter>=5.2.0  # Modern themed widgets for tk
 
 # Testing
 pytest==7.4.3
@@ -40,9 +46,13 @@ pytest-flask==1.3.0
 pytest-xdist==3.3.1
 execnet>=1.9.0
 pytest-ordering==0.6
+pytest-variables>=3.0.0  # Required by pytest-selenium
+pytest-mock>=3.10.0  # For mocking in tests
+pytest-asyncio>=0.21.0  # For async tests
 coverage==7.3.2
 psutil>=5.9.0
-python-magic>=0.4.27  # Cross-platform compatible version
+python-magic-bin==0.4.14; sys_platform == 'win32'  # Windows-specific version
+python-magic>=0.4.27; sys_platform != 'win32'  # For non-Windows platforms
 redis>=4.0.0
 
 # Selenium and related
@@ -60,8 +70,26 @@ sniffio>=1.2.0  # Required by trio
 wsproto>=1.0.0  # Required by trio-websocket
 h11>=0.14.0  # Required by wsproto
 
+# Security
+cryptography>=41.0.0  # For additional cryptographic operations
+bcrypt>=4.0.0  # For password hashing
+pyOpenSSL>=23.0.0  # For SSL/TLS support
+cffi>=1.15.0  # Required by cryptography
+
+# Image Processing
+scikit-image>=0.21.0  # Additional image processing capabilities
+imageio>=2.31.0  # For reading/writing images
+tifffile>=2023.7.10  # For TIFF file support
+
 # Utilities
 python-dateutil>=2.8.2
 setuptools>=68.0.0
 wheel>=0.41.0
 urllib3==2.0.7
+tqdm>=4.65.0  # For progress bars
+colorama>=0.4.6  # For colored terminal output
+pyinstaller>=5.13.0  # For creating executables
+black>=23.7.0  # For code formatting
+isort>=5.12.0  # For import sorting
+flake8>=6.1.0  # For code linting
+mypy>=1.5.0  # For type checking
