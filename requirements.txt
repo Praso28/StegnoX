@@ -50,6 +50,15 @@ selenium>=4.0.0
 websocket-client>=1.6.0  # Required by selenium for WebSocket support
 webdriver-manager>=4.0.0  # Handles ChromeDriver installation
 pytest-selenium>=4.0.0  # Pytest integration for Selenium
+tenacity>=8.2.0  # Required by pytest-selenium
+async-generator>=1.10  # Required by selenium
+trio>=0.17.0  # Required by selenium
+trio-websocket>=0.9.0  # Required by selenium
+outcome>=1.1.0  # Required by trio
+sortedcontainers>=2.4.0  # Required by trio
+sniffio>=1.2.0  # Required by trio
+wsproto>=1.0.0  # Required by trio-websocket
+h11>=0.14.0  # Required by wsproto
 
 # Utilities
 python-dateutil>=2.8.2
